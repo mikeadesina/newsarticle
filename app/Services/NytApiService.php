@@ -1,10 +1,7 @@
 <?php
-
 namespace App\Services;
-
 use GuzzleHttp\Client;
-
-class NytApiService
+class NytApiService implements ArticleFetcherInterface
 {
     protected $client;
 
@@ -13,7 +10,7 @@ class NytApiService
         $this->client = new Client();
     }
 
-    public function fetchArticles()
+    public function fetchArticles(): array
     {
         $response = $this->client->get('https://api.nytimes.com/svc/topstories/v2/technology.json', [
             'query' => [
@@ -23,4 +20,11 @@ class NytApiService
 
         return json_decode($response->getBody(), true)['results'];
     }
+
+    public function getSourceName(): string
+    {
+        return 'The New York Times';
+    }
 }
+
+

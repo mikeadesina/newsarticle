@@ -4,7 +4,7 @@ namespace App\Services;
 
 use GuzzleHttp\Client;
 
-class NewsApiService
+class NewsApiService implements ArticleFetcherInterface
 {
     protected $client;
 
@@ -13,7 +13,7 @@ class NewsApiService
         $this->client = new Client();
     }
 
-    public function fetchArticles()
+    public function fetchArticles(): array
     {
         $response = $this->client->get('https://newsapi.org/v2/top-headlines', [
             'query' => [
@@ -22,6 +22,12 @@ class NewsApiService
                 'country' => 'us',
             ]
         ]);
+
         return json_decode($response->getBody(), true)['articles'];
+    }
+
+    public function getSourceName(): string
+    {
+        return 'NewsAPI';
     }
 }
